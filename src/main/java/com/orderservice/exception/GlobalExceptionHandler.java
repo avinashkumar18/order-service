@@ -18,6 +18,19 @@ public class GlobalExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
+    @ExceptionHandler(InvalidInputException.class)
+    public ResponseEntity<ApiErrorResponse> handleInvalidInput(@NotNull InvalidInputException ex, @NotNull HttpServletRequest request) {
+        logger.warn("Invalid input: {}", ex.getMessage());
+        ApiErrorResponse error = new ApiErrorResponse(
+                Instant.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return CommonUtils.getResponseEntity(error, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiErrorResponse> handleResourceNotFound(@NotNull ResourceNotFoundException ex, @NotNull HttpServletRequest request) {
         logger.warn("Resource not found: {}", ex.getMessage());

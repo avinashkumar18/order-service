@@ -2,6 +2,7 @@ package com.orderservice.controller;
 
 import com.orderservice.dto.OrderDTO;
 import com.orderservice.dto.PageResponse;
+import com.orderservice.exception.InvalidInputException;
 import com.orderservice.service.OrderService;
 import com.orderservice.util.CommonUtils;
 import org.slf4j.Logger;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/orders")
 public class OrderController {
     private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
+    private static final int MAX_PAGE_SIZE = 100;
 
     OrderService orderService;
 
@@ -40,6 +42,9 @@ public class OrderController {
 
     @GetMapping("/{orderId}")
     public ResponseEntity<?> getOrderById(@PathVariable int orderId) {
+        if (orderId <= 0) {
+            throw new InvalidInputException("Order ID must be greater than 0");
+        }
         logger.info("get /orders/{orderId} called with orderId: {}", orderId);
         OrderDTO orderByOrderId = orderService.getOrderByOrderId(orderId);
         logger.info("Order found with orderId: {}", orderId);
@@ -47,7 +52,10 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllOrders( @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
+    public ResponseEntity<?> getAllOrders(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
+        if (page < 0 || size <= 0 || size > MAX_PAGE_SIZE) {
+            throw new InvalidInputException("Invalid pagination parameters: page must be >= 0 and size must be between 0 and " + MAX_PAGE_SIZE);
+        }
         logger.info("GET /orders called with page: {} and size: {}", page, size);
         PageResponse<OrderDTO> orders = orderService.getAllOrders(page, size);
         logger.info("Orders found with page: {} and size: {}", page, size);
