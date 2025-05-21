@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: order-service
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/
+      database: assignment
+  mvc:
+    servlet:
+      path: /api/v1
