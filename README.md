@@ -85,13 +85,37 @@ mvn test
 - Access at `/api/v1/actuator`
 - Includes health checks, metrics, etc.
 
-## Error Handling
-- Standardized error responses
-- HTTP status codes:
-  - 200: Success
-  - 201: Created
-  - 400: Bad Request
-  - 404: Not Found
-  - 409: Conflict
-  - 500: Internal Server Error
+## Postman Collection
 
+### API Endpoints Collection
+The Postman collection for testing the Order Service APIs is available in:
+`/postman/Order-Service.postman_collection.json`
+
+### Environment Variables
+The collection uses the following environment variables:
+- `base_url`: Base URL of the service (default: http://localhost:8080/api/v1)
+- `order_id`: Order ID for testing specific order operations
+
+### Available Requests
+1. **Test Connection**
+    - GET `/orders/test`
+    - Tests if the service is up and running
+
+2. **Create Order**
+    - POST `/orders/create`
+    - Sample Request Body:
+      ```json
+      {
+          "orderId": 1,
+          "item": "iPhone",
+          "quantity": 2
+      }
+      ```
+
+3. **Get Order by ID**
+    - GET `/orders/{orderId}`
+    - Uses the `order_id` environment variable
+
+4. **Get All Orders**
+    - GET `/orders?page=0&size=20`
+    - Supports pagination parameters
