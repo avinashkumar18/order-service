@@ -1,0 +1,116 @@
+{
+	"info": {
+		"_postman_id": "937bdc86-2ebe-48a2-8364-7329909239c5",
+		"name": "Order Processing Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23874628"
+	},
+	"item": [
+		{
+			"name": "test connection",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/{{bastPath}}/orders/test",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"{{bastPath}}",
+						"orders",
+						"test"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create order",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"orderId\": 123,\n  \"item\": \"iPhone 15 pro\",\n  \"quantity\": 7\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/{{bastPath}}/orders/create",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"{{bastPath}}",
+						"orders",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get paginated orders",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/{{bastPath}}/rders?page=1&size=1",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"{{bastPath}}",
+						"rders"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "size",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get order by orderId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/{{bastPath}}/orders/111",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"{{bastPath}}",
+						"orders",
+						"111"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "localhost:8080",
+			"type": "default"
+		},
+		{
+			"key": "bastPath",
+			"value": "api/v1",
+			"type": "default"
+		}
+	]
+}
