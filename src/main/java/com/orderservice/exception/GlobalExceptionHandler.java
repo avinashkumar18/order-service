@@ -44,6 +44,19 @@ public class GlobalExceptionHandler {
         return CommonUtils.getResponseEntity(error, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(KafkaPublishException.class)
+    public ResponseEntity<ApiErrorResponse> handleKafkaPublishException(@NotNull KafkaPublishException ex, @NotNull HttpServletRequest request) {
+        logger.error("Kafka publish error: {}", ex.getMessage());
+        ApiErrorResponse error = new ApiErrorResponse(
+                Instant.now(),
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return CommonUtils.getResponseEntity(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiErrorResponse> handleAnyException(Exception e, @NotNull HttpServletRequest request) {
         logger.error("Exception occurred", e);
