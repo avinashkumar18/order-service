@@ -1,12 +1,9 @@
 server:
   port: 8081
 spring:
-  application:
-    name: order-service
   data:
     mongodb:
-      uri: mongodb://172.17.0.1:27017/
-      database: assignment
+      uri: mongodb://test:test123@mongo:27017/assignment?authSource=admin
   kafka:
     bootstrap-servers: kafka:9092
     consumer:
