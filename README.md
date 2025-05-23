@@ -113,10 +113,22 @@ docker network create kafka-net
 3. Build and run order-service spring boot application
    ```
    docker build -t order-service . --no-cache
-   docker run --network kafka-net -p 8081:8081 -p 8082:8082 order-service \
+   ```
+   ```
+   docker run --network kafka-net -d -p 8081:8081 -p 8082:8082 order-service \
    --name order-service-prod \
    -e SPRING_PROFILES_ACTIVE=prod 
    ```
+4. Run mongo (optional)
+    ```
+   docker run -d --network kafka-net \
+    --name mongo \
+    -p 27017:27017 \
+    -e MONGO_INITDB_ROOT_USERNAME=test \
+    -e MONGO_INITDB_ROOT_PASSWORD=test123 \
+    mongo:7.0
+
+    ```
 
 ## Kafka Implementation
 
