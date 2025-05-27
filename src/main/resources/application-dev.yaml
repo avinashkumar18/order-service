@@ -3,15 +3,14 @@ server:
 spring:
   data:
     mongodb:
-      uri: mongodb://localhost:27017/
-      database: assignment
+      uri: mongodb://test:test123@localhost:27017/assignment?authSource=admin
   kafka:
     bootstrap-servers: localhost:9093
     consumer:
       group-id: order-service-group
       auto-offset-reset: earliest
-      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       properties:
         spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
         spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
@@ -20,6 +19,8 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 logging:
+  file:
+    name: logs/app-dev.log
   level:
     org.springdoc: DEBUG
 management:

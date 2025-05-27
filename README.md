@@ -48,15 +48,14 @@ Key configurations in `application.yaml`:
 spring:
   data:
     mongodb:
-      uri: mongodb://localhost:27017/
-      database: assignment
+      uri: mongodb://username:password@localhost:27017/assignment?authSource=admin
     kafka:
     bootstrap-servers: kafka:9092
     consumer:
        group-id: order-service-group
        auto-offset-reset: earliest
-       key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
-       value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
        properties:
           spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
           spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
@@ -115,9 +114,15 @@ docker network create kafka-net
    docker build -t order-service . --no-cache
    ```
    ```
-   docker run --network kafka-net -d -p 8081:8081 -p 8082:8082 order-service \
+   docker run --network kafka-net -d \
+   -p 8081:8081 \
+   -p 8082:8082 \
+   -v $(pwd)/logs:/logs \
+   -v $(pwd)/src/main/resources:/tmp/config \
+   -e SPRING_CONFIG_LOCATION=file:/tmp/config/ \
+   -e SPRING_PROFILES_ACTIVE=prod \
    --name order-service-prod \
-   -e SPRING_PROFILES_ACTIVE=prod 
+   order-service
    ```
 4. Run mongo (optional)
     ```

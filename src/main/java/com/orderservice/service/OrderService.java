@@ -65,7 +65,7 @@ public class OrderService {
         logger.info("Getting all orders with page: {} and size: {}", page, size);
         Page<Order> orderPage = ordersRepository.findAll(pageable);
         List<OrderDTO> orderDTOList = CollectionUtils.isEmpty(orderPage.getContent()) ? new ArrayList<>()
-                : orderPage.getContent().stream().map(OrderMapper.INSTANCE::orderToOrderDTO).toList();
+                : orderPage.getContent().stream().map(OrderMapper.INSTANCE::orderToOrderDTO).toList(); //filter(o -> o.getQuantity() > 5).
         return new PageResponse<>(orderPage.getNumber(), orderPage.getSize(), orderPage.getTotalElements(), orderPage.getTotalPages(), orderDTOList);
     }
 

@@ -1,10 +1,20 @@
 package com.orderservice.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+
 public class OrderDTO {
 
-    private int orderId;
+    @NotNull(message = "OrderId is required")
+    private Integer orderId;
+
+    @NotBlank(message = "Item is required")
+    @Pattern(regexp = "^[a-zA-Z0-9 ]+$", message = "Item must be alphanumeric and can include spaces")
     private String item;
-    private int quantity;
+
+    @NotNull(message = "Quantity is required")
+    private Integer quantity;
 
     public OrderDTO() {
     }
