@@ -14,6 +14,24 @@ A Spring Boot microservice for managing orders with MongoDB persistence and Kafk
 - **Maven**
 - **Docker**
 
+## CI/CD Pipeline
+
+This project uses GitHub Actions for continuous integration and code quality checks:
+- Automatic builds and tests on PR and push events
+- SonarCloud integration for code analysis
+- Supports feature branches with pattern `feature-**`
+- Skips documentation changes (`.md` files)
+
+### Required Setup
+1. Configure SonarCloud:
+   - Create account on sonarcloud.io
+   - Set `SONAR_TOKEN` in GitHub Secrets
+
+### Code Quality
+- View SonarCloud analysis at: `https://sonarcloud.io/project/overview?id=your-project-key`
+- Runs on every PR to main branch
+- Checks code quality, coverage, and security
+
 ## API Endpoints
 
 ### Orders API
