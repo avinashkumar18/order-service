@@ -4,7 +4,7 @@ on:
   push:
     branches: 
       - main
-      - 'feature-sonar'    # Changed from feature/sonar
+      - 'feature-sonar'
       - 'feature-**'
       - 'feature/**'
       - 'release/**'
