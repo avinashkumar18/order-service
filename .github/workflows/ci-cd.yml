@@ -1,0 +1,75 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: 
+      - main
+      - 'feature-sonar'    # Changed from feature/sonar
+      - 'feature-**'
+      - 'feature/**'
+      - 'release/**'
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+
+jobs:
+  build-and-sonar:
+    # Skip duplicate workflow runs for PRs
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+      
+      - name: Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn clean verify sonar:sonar -Dsonar.host.url=https://sonarcloud.io
+
+# Parameters Guide:
+
+# 1. SONAR_TOKEN
+# - Sign up at https://sonarcloud.io/
+# - Create a new project
+# - Go to Account > Security > Generate Token
+# - Add to GitHub Secrets as SONAR_TOKEN
+
+# 2. GITHUB_TOKEN
+# - Automatically provided by GitHub Actions
+# - No manual setup needed
+
+# Add these secrets in GitHub:
+# Repository Settings > Secrets and Variables > Actions > New Repository Secret
+
+# Security Notes for Secrets:
+# - GitHub Secrets are encrypted and never exposed in logs or to pull requests from forks
+# - Only specific repository roles (admin/maintainer) can access secrets configuration
+# - Secrets are not passed to workflows that are triggered by a pull request from a fork
+# - Best Practices:
+#   1. Never print secrets in workflow logs
+#   2. Rotate tokens periodically
+#   3. Use environment protection rules for production secrets
+#   4. Limit secret access to specific environments or branches
+#   5. Review workflow permissions regularly
+
+# WARNING: While secrets are secure, be careful not to:
+# - Log secrets using echo, print, or debug statements
+# - Include secrets in error messages
+# - Pass secrets to untrusted third-party actions
+# - Use secrets in pull request triggers from forks
